@@ -29,8 +29,13 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Filter criteria are missing.");
             }
-            var buses = await _busService.GetBusesAsync(filterDto);
-            return Ok(buses);
+            var (buses, totalCount) = await _busService.GetBusesAsync(filterDto);
+            var result = new
+            {
+                Buses = buses,
+                TotalCount = totalCount
+            };
+            return Ok(result);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBusById(int id)
@@ -61,7 +66,6 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Bus data is null");
             }
-            
 
             bool isUpdated = await _busService.UpdateBusAsync(id, updateBusDto);
             if (!isUpdated)

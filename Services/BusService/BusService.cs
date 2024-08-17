@@ -9,6 +9,7 @@ using Services.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
+using Azure;
 
 
 namespace Services.BusService
@@ -41,41 +42,44 @@ namespace Services.BusService
             await _context.SaveChangesAsync();
             return newBus.Id;
         }
-        public async Task<IEnumerable<Bus>> GetBusesAsync(BusFilterDto filterDto)
+        public async Task<(IEnumerable<Bus>, int)> GetBusesAsync(BusFilterDto filterDto)
         {
             var query = _context.Buses.AsQueryable();
 
             if (!string.IsNullOrEmpty(filterDto.DriverName))
             {
-                query = query.Where(b => b.DriverName.Contains(filterDto.DriverName));
+                query = query.Where(b => b.DriverName.Contains(filterDto.DriverName) && !b.IsDeleted);
             }
 
             if (!string.IsNullOrEmpty(filterDto.DriverPhoneNumber))
             {
-                query = query.Where(b => b.DriverPhoneNumber.Contains(filterDto.DriverPhoneNumber));
+                query = query.Where(b => b.DriverPhoneNumber.Contains(filterDto.DriverPhoneNumber) && !b.IsDeleted);
             }
 
             if (!string.IsNullOrEmpty(filterDto.BusStopStation))
             {
-                query = query.Where(b => b.BusStopStation.Contains(filterDto.BusStopStation));
+                query = query.Where(b => b.BusStopStation.Contains(filterDto.BusStopStation) && !b.IsDeleted);
             }
 
             if (filterDto.CarNumber.HasValue)
             {
-                query = query.Where(b => b.CarNumber == filterDto.CarNumber.Value);
+                query = query.Where(b => b.CarNumber == filterDto.CarNumber.Value && !b.IsDeleted);
             }
 
             if (filterDto.BusCapacity.HasValue)
             {
-                query = query.Where(b => b.BusCapacity == filterDto.BusCapacity.Value);
+                query = query.Where(b => b.BusCapacity == filterDto.BusCapacity.Value && !b.IsDeleted);
             }
 
             if (!string.IsNullOrEmpty(filterDto.CarModel))
             {
-                query = query.Where(b => b.CarModel.Contains(filterDto.CarModel));
+                query = query.Where(b => b.CarModel.Contains(filterDto.CarModel) && !b.IsDeleted);
             }
-
-            return await query.ToListAsync();
+            var totalCount = await query.CountAsync();
+            var pageNumber = filterDto.PageNumber ?? 1;
+            var pageSize = filterDto.PageSize ?? totalCount;
+            var buses = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return (buses, totalCount);
         }
         public async Task<BusDto> GetBusByIdAsync(int id)
         {
@@ -130,22 +134,10 @@ namespace Services.BusService
             bus.CarNumber = busDto.CarNumber;
             bus.BusCapacity = busDto.BusCapacity;
             bus.CarModel = busDto.CarModel;
-
+            bus.UpdatedOn = DateTime.UtcNow;
+            bus.UpdatedById = 1;
             await _context.SaveChangesAsync();
             return true;
-        }
-        public async Task<bool> FetchAndUpdateAsync(int id, UpdateBusDto busdto)
-        {
-            var bus = await GetBusByIdAsync(id);
-            if(bus == null)
-            {
-                return false;
-            }
-            var update = await UpdateBusAsync(id, busdto);
-            if(!update)
-                return false;
-            return true;
-
         }
         public async Task<bool> ProcessExcelFile(IFormFile file)
         {
@@ -187,9 +179,6 @@ namespace Services.BusService
                         //    CreatedById = Int32.Parse(worksheet.Cells[row, 11].Value?.ToString()),
                         //    UpdatedOn = DateTime.Parse(worksheet.Cells[row, 12].Value?.ToString()),
                         //    UpdatedById = Int32.Parse(worksheet.Cells[row, 13].Value?.ToString())
-                        //    //UpdatedOn = worksheet.Cells[row, 12].Value?.ToString() == "NULL" ? null : DateTime.Parse(worksheet.Cells[row, 12].Value?.ToString()),
-                        //    //UpdatedById = worksheet.Cells[row, 13].Value?.ToString() == "NULL" ? null : Int32.Parse(worksheet.Cells[row, 13].Value?.ToString())
-
                         //};
                         //_context.Buses.Add(entity);
                     }

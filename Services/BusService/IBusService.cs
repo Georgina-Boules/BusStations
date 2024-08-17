@@ -12,11 +12,10 @@ namespace Services.BusService
     public interface IBusService
     {
         Task<int> AddBusRecordAsync(CreateBusDto busdto);
-        Task<IEnumerable<Bus>> GetBusesAsync(BusFilterDto filterDto);
+        Task<(IEnumerable<Bus>, int)> GetBusesAsync(BusFilterDto filterDto);
         Task<BusDto> GetBusByIdAsync(int id);
         Task<bool> DeleteBusAsync(int id);
         Task<bool> UpdateBusAsync(int id, UpdateBusDto busDto);
         Task<bool> ProcessExcelFile(IFormFile file);
-        Task<bool> FetchAndUpdateAsync(int id, UpdateBusDto busdto);
     }
 }

@@ -38,14 +38,6 @@ namespace DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Optionally configure entities
-            //modelBuilder.Entity<User>().ToTable("Users");
-            //modelBuilder.Entity<Bus>().ToTable("Buses");
-            //modelBuilder.Entity<Bus>().HasKey(b => b.Id);
-
-            //modelBuilder.Entity<Bus>()
-            //    .Property(b => b.Id)
-            //    .ValueGeneratedOnAdd();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

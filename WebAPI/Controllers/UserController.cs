@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
                 return BadRequest("Invalid model");
             }
 
-            var user = _context.Users.FirstOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
+            var user = _context.Users.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
             if (user == null)
             {
                 return Unauthorized();

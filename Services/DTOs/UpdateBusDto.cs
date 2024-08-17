@@ -16,6 +16,5 @@ namespace Services.DTOs
         public string CarModel { get; set; }
         public string BusLineStops { get; set; }
         public string BusType { get; set; }
-        public int UpdatedById { get; set; }
     }
 }
