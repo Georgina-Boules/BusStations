@@ -25,7 +25,6 @@ namespace Services.BusService
         {
             var newBus = new Bus
             {
-                // Id = _context.Buses.Count() > 0 ? _context.Buses.Max(b => b.Id) + 1 : 1,
                 DriverName = busdto.DriverName,
                 DriverPhoneNumber = busdto.DriverPhoneNumber,
                 BusStopStation = busdto.BusStopStation,
@@ -41,8 +40,9 @@ namespace Services.BusService
             await _context.Buses.AddAsync(newBus);
             await _context.SaveChangesAsync();
             return newBus.Id;
+
         }
-        public async Task<(IEnumerable<Bus>, int)> GetBusesAsync(BusFilterDto filterDto)
+        public async Task<ApiReponse<List<Bus>>> GetBusesAsync(BusFilterDto filterDto)
         {
             var query = _context.Buses.AsQueryable();
 
@@ -79,9 +79,18 @@ namespace Services.BusService
             var pageNumber = filterDto.PageNumber ?? 1;
             var pageSize = filterDto.PageSize ?? totalCount;
             var buses = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return (buses, totalCount);
+            //return (buses, totalCount);
+            return new ApiReponse<List<Bus>>
+            {
+                Data = buses,
+                //Data = totalCount == 1 ? buses : new { items = buses },
+                Pagination = new Pagination { CurrentPage = pageNumber, TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize), TotalItems = totalCount },
+                Message = "Buses retrieved successfully",
+                ErrorList = new List<string>()
+            };
         }
-        public async Task<BusDto> GetBusByIdAsync(int id)
+
+        public async Task<ApiReponse<BusDto>> GetBusByIdAsync(int id)
         {
             var bus = await _context.Buses
                 .Where(b => b.Id == id && !b.IsDeleted)
@@ -104,7 +113,12 @@ namespace Services.BusService
                 })
                 .FirstOrDefaultAsync();
 
-            return bus;
+            return new ApiReponse<BusDto>
+            {
+                Data = bus,
+                Message = bus != null ? "Bus found" : "Bus not found",
+                ErrorList = bus == null ? new List<string> { "No bus found with the given ID." } : new List<string>()
+            };
         }
         public async Task<bool> DeleteBusAsync(int id)
         {

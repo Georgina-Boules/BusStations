@@ -1,8 +1,8 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.BusService;
 using Services.DTOs;
+using DB.Models;
 namespace WebAPI.Controllers
 {
     [ApiController]
@@ -18,8 +18,8 @@ namespace WebAPI.Controllers
         {
             if(busDto == null)
                 return BadRequest("Bus data is Null");
-            int newBusId = await _busService.AddBusRecordAsync(busDto);
-            return Ok(new { Id = newBusId });
+            var id = await _busService.AddBusRecordAsync(busDto);
+            return Ok(id);
         }
 
         [HttpGet("Filter")]
@@ -29,18 +29,13 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Filter criteria are missing.");
             }
-            var (buses, totalCount) = await _busService.GetBusesAsync(filterDto);
-            var result = new
-            {
-                Buses = buses,
-                TotalCount = totalCount
-            };
-            return Ok(result);
+            ApiReponse<List<Bus>> response = await _busService.GetBusesAsync(filterDto);
+            return Ok(response);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBusById(int id)
         {
-            BusDto bus = await _busService.GetBusByIdAsync(id);
+            ApiReponse<BusDto> bus = await _busService.GetBusByIdAsync(id);
             if (bus == null)
             {
                 return NotFound($"Bus with ID {id} not found");
