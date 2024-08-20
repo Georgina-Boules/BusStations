@@ -51,16 +51,6 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowSpecificOrigin", builder =>
-//    {
-//        builder.WithOrigins("http://localhost:52193") // Allow only your specific frontend origin
-//               .AllowAnyMethod()
-//               .AllowAnyHeader();
-//    });
-//});
-
 
 // Add controllers
 builder.Services.AddControllers();
@@ -71,11 +61,6 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-
-//app.UseCors("AllowAllHeaders");
-//app.UseCors("AllowSpecificOrigin");
-//builder.Services.AddAuthorization();
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 
@@ -90,9 +75,6 @@ app.UseRouting();
 app.UseCors("AllowAllHeaders");
 app.UseAuthentication();
 app.UseAuthorization();
-// Enable authentication and authorization middleware
-//app.UseAuthentication();
-//app.UseAuthorization();
 
 
 // Map controllers

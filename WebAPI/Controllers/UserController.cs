@@ -21,40 +21,7 @@ namespace WebAPI.Controllers
             _context = context;
             _configuration = configuration;
         }
-        //Comment
-        //[HttpPost]
-        //public IActionResult Login([FromBody] LoginDto model)
-        //{
-        //    var user = _context.Users.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
-        //    if (user == null)
-        //    {
-        //        return Unauthorized();
-        //    }
-
-        //    var claims = new[]
-        //    {
-        //           new System.Security.Claims.Claim("Id", user.Id),
-        //           new Claim("UserName", user.UserName)
-        //       };
-
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        //    var expires = DateTime.Now.AddDays(1);
-
-        //    var token = new JwtSecurityToken(
-        //        _configuration["Jwt:Issuer"],
-        //        _configuration["Jwt:Issuer"],
-        //        claims,
-        //        expires: expires,
-        //        signingCredentials: creds
-        //    );
-
-        //    return Ok(new
-        //    {
-        //        token = new JwtSecurityTokenHandler().WriteToken(token),
-        //        expiration = expires
-        //    });
-        //}
+   
 
         [HttpPost]
         public IActionResult Login([FromBody] LoginDto model)
@@ -78,7 +45,7 @@ namespace WebAPI.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddDays(1);
+            var expires = DateTime.UtcNow.AddDays(5000);
 
             var token = new JwtSecurityToken(
                 _configuration["Jwt:Issuer"],
