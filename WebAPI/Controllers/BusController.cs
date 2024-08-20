@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
 
             return Ok(bus);
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteBus(int id)
         {
             bool isDeleted = await _busService.DeleteBusAsync(id);

@@ -44,7 +44,7 @@ namespace Services.BusService
         }
         public async Task<ApiReponse<List<Bus>>> GetBusesAsync(BusFilterDto filterDto)
         {
-            var query = _context.Buses.AsQueryable();
+            var query = _context.Buses.Where(x=>x.IsDeleted==false).AsQueryable();
 
             if (!string.IsNullOrEmpty(filterDto.DriverName))
             {
