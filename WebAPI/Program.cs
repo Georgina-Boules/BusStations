@@ -2,6 +2,7 @@ using DB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Office.Interop.Excel;
 using Microsoft.OpenApi.Models;
 using Services.BusService;
 using System.Text;
@@ -41,7 +42,15 @@ builder.Services.AddAuthentication(options =>
 
 // Add authorization services
 builder.Services.AddAuthorization();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllHeaders", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 // Add controllers
 builder.Services.AddControllers();
 
