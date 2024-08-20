@@ -5,6 +5,7 @@ using Services.DTOs;
 using DB.Models;
 namespace WebAPI.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class BusController : Controller
@@ -21,8 +22,8 @@ namespace WebAPI.Controllers
             var id = await _busService.AddBusRecordAsync(busDto);
             return Ok(id);
         }
-
-        [HttpGet("Filter")]
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> GetFilteredBuses([FromQuery] BusFilterDto filterDto)
         {
             if (filterDto == null)
