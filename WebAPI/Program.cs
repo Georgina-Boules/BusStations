@@ -77,8 +77,8 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // Enable authentication and authorization middleware
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 // Map controllers
 app.MapControllers();
