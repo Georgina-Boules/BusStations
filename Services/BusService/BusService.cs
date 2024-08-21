@@ -178,23 +178,6 @@ namespace Services.BusService
                             BusType = worksheet.Cells[row, 8].Value?.ToString()
                         };
                         await AddBusRecordAsync(entity);
-                        //var entity = new Bus
-                        //{
-                        //    DriverName = worksheet.Cells[row, 1].Value?.ToString(),
-                        //    DriverPhoneNumber = worksheet.Cells[row, 2].Value?.ToString(),
-                        //    BusStopStation = worksheet.Cells[row, 3].Value?.ToString(),
-                        //    CarNumber = Int32.Parse(worksheet.Cells[row, 4].Value.ToString()),
-                        //    BusCapacity = Int32.Parse(worksheet.Cells[row, 5].Value.ToString()),
-                        //    CarModel = worksheet.Cells[row, 6].Value?.ToString(),
-                        //    BusLineStops = worksheet.Cells[row, 7].Value?.ToString(),
-                        //    BusType = worksheet.Cells[row, 8].Value?.ToString(),
-                        //    IsDeleted = Boolean.Parse(worksheet.Cells[row, 9].Value?.ToString()),
-                        //    CreatedOn = DateTime.Parse(worksheet.Cells[row, 10].Value?.ToString()),
-                        //    CreatedById = Int32.Parse(worksheet.Cells[row, 11].Value?.ToString()),
-                        //    UpdatedOn = DateTime.Parse(worksheet.Cells[row, 12].Value?.ToString()),
-                        //    UpdatedById = Int32.Parse(worksheet.Cells[row, 13].Value?.ToString())
-                        //};
-                        //_context.Buses.Add(entity);
                     }
                     await _context.SaveChangesAsync();
                 }
