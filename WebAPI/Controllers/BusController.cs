@@ -22,6 +22,7 @@ namespace WebAPI.Controllers
             var id = await _busService.AddBusRecordAsync(busDto);
             return Ok(id);
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetFilteredBuses([FromQuery] BusFilterDto filterDto)
         {
@@ -70,7 +71,7 @@ namespace WebAPI.Controllers
 
             return NoContent();
         }
-        [HttpPost("Upload")]
+        [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
             if (file == null || file.Length == 0)

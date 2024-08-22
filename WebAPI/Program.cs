@@ -63,16 +63,16 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
-
+    
 }
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors("AllowAllHeaders");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors("AllowAllHeaders");
 app.UseAuthentication();
 app.UseAuthorization();
 
