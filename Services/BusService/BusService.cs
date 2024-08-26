@@ -58,7 +58,7 @@ namespace Services.BusService
 
             if (!string.IsNullOrEmpty(filterDto.BusStopStation))
             {
-                query = query.Where(b => b.BusStopStation.Contains(filterDto.BusStopStation) && !b.IsDeleted);
+                query = query.Where(b => (b.BusStopStation.Contains(filterDto.BusStopStation) ||b.BusLineStops.Contains(filterDto.BusStopStation)) && !b.IsDeleted);
             }
 
             if (filterDto.CarNumber.HasValue)
