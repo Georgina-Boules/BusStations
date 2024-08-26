@@ -150,6 +150,8 @@ namespace Services.BusService
             bus.CarModel = busDto.CarModel;
             bus.UpdatedOn = DateTime.UtcNow;
             bus.UpdatedById = 1;
+            bus.BusLineStops = busDto.BusLineStops;
+            bus.BusType= busDto.BusType;
             await _context.SaveChangesAsync();
             return true;
         }
