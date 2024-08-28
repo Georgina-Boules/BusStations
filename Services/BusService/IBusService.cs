@@ -11,7 +11,7 @@ namespace Services.BusService
 {
     public interface IBusService
     {
-        Task<int> AddBusRecordAsync(CreateBusDto busdto);
+        Task<int> AddBusRecordAsync(UpdateBusDto busdto);
         Task<ApiReponse<List<Bus>>> GetBusesAsync(BusFilterDto filterDto);
         Task<ApiReponse<BusDto>> GetBusByIdAsync(int id);
         Task<bool> DeleteBusAsync(int id);

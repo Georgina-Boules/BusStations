@@ -21,7 +21,7 @@ namespace Services.BusService
         {
            _context = context;
         }
-        public async Task<int> AddBusRecordAsync(CreateBusDto busdto)
+        public async Task<int> AddBusRecordAsync(UpdateBusDto busdto)
         {
             var newBus = new Bus
             {
@@ -168,7 +168,7 @@ namespace Services.BusService
 
                     for (int row = 2; row <= rowCount; row++) // Assuming row 1 is the header
                     {
-                        var entity = new CreateBusDto
+                        var entity = new UpdateBusDto
                         {
                             DriverName = worksheet.Cells[row, 1].Value?.ToString(),
                             DriverPhoneNumber = worksheet.Cells[row, 2].Value?.ToString(),
@@ -179,7 +179,15 @@ namespace Services.BusService
                             BusLineStops = worksheet.Cells[row, 7].Value?.ToString(),
                             BusType = worksheet.Cells[row, 8].Value?.ToString()
                         };
-                        await AddBusRecordAsync(entity);
+                        if (_context.Buses.Where(b => b.CarNumber == entity.CarNumber).Any() == true)
+                        {
+                            var id = _context.Buses.Where(b => b.CarNumber == entity.CarNumber).First().Id;
+                            await UpdateBusAsync(id, entity);
+                        }
+                        else
+                        {
+                            await AddBusRecordAsync(entity);
+                        }
                     }
                     await _context.SaveChangesAsync();
                 }

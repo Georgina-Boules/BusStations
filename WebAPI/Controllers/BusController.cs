@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
             _busService = busService;
         }
         [HttpPost]
-        public async Task<IActionResult> AddBus(CreateBusDto busDto)
+        public async Task<IActionResult> AddBus(UpdateBusDto busDto)
         {
             if(busDto == null)
                 return BadRequest("Bus data is Null");
