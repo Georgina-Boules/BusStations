@@ -152,6 +152,7 @@ namespace Services.BusService
             bus.UpdatedById = 1;
             bus.BusLineStops = busDto.BusLineStops;
             bus.BusType= busDto.BusType;
+            bus.IsDeleted = false;
             await _context.SaveChangesAsync();
             return true;
         }
